@@ -1,0 +1,127 @@
+plugins {
+    id 'idea'
+    alias libs.plugins.cursegradle
+    alias libs.plugins.minotaur
+}
+
+apply plugin: libs.plugins.quilt.loom.get().pluginId
+
+base {
+    archivesName = "${mod_id}-quilt-${libs.versions.minecraft.get()}"
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Quilt Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Quilt Server")
+            ideConfigGenerated(true)
+            runDir("run-server")
+        }
+    }
+    runs.each {
+        it.vmArgs '-Dnet.fabricmc.tinyremapper.knownindybsm=org/codehaus/groovy/vmplugin/v8/IndyInterface'
+    }
+}
+
+configurations {
+    localImplementation
+    runtimeClasspath.extendsFrom localImplementation
+    compileOnly.extendsFrom localImplementation
+}
+
+dependencies {
+    minecraft libs.minecraft
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.mappings.get()}@zip")
+    }
+
+    modImplementation libs.quilt.loader
+
+    modImplementation libs.qfapi
+
+    modImplementation libs.groovyduvet.all
+    localImplementation libs.groovyduvet.core
+
+    compileOnly(project(path: ":Common", configuration: "namedElements")) {
+        exclude group: 'org.quiltmc'
+    }
+}
+
+compileGroovy {
+    source project(":Common").sourceSets.main.allGroovy
+}
+
+compileJava {
+    source project(":Common").sourceSets.main.allJava
+}
+
+processResources {
+    from project(':Common').sourceSets.main.resources
+    exclude 'mods.groovy'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId base.archivesName.get()
+            from components.java
+        }
+    }
+}
+
+
+if (System.getenv('CURSEFORGE_KEY')) {
+    curseforge {
+        apiKey = System.getenv('CURSEFORGE_KEY')
+        project {
+            id = '873765'
+            releaseType = "${project.release_type}"
+            addGameVersion libs.versions.minecraft.get()
+            addGameVersion 'Quilt'
+            mainArtifact(remapJar) {
+                displayName = "Mystery Potions [Quilt] v$project.version"
+            }
+            relations {
+                requiredDependency 'groovyduvet'
+                requiredDependency 'qsl'
+            }
+        }
+        options {
+            forgeGradleIntegration = true
+        }
+    }
+
+    tasks.curseforge {
+        dependsOn remapJar
+    }
+}
+
+if (System.getenv('MODRINTH_KEY')) {
+    modrinth {
+        token = System.getenv('MODRINTH_KEY')
+        projectId = '7t2kydgp'
+        versionNumber = "$project.version"
+        versionType = "${project.release_type}"
+        detectLoaders = false
+        uploadFile = remapJar
+
+        gameVersions = [libs.versions.minecraft.get()]
+        loaders = ['quilt']
+        dependencies {
+            required.project 'groovyduvet'
+            required.project 'qsl'
+        }
+    }
+
+    tasks.modrinth {
+        dependsOn remapJar
+    }
+}
