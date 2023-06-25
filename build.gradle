@@ -32,6 +32,13 @@ subprojects {
     license {
         rule rootProject.file('header.txt')
         exclude '**/*.mcmeta'
+        exclude '**/.cache/**'
+    }
+
+    afterEvaluate {
+        tasks.withType(AbstractArchiveTask).configureEach {
+            exclude '.cache'
+        }
     }
 
     configurations.configureEach {

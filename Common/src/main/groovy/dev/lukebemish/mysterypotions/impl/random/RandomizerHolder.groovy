@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2023 Luke Bemish and contributors
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ */
+
 package dev.lukebemish.mysterypotions.impl.random
 
 import groovy.transform.CompileStatic
@@ -22,7 +27,7 @@ class RandomizerHolder<T> {
 
         Random random = new Random(seed + seedLocation.hashCode())
         List<ResourceLocation> possibleLocations = possible.keySet().sort(false) { it.toString() }
-        int index = random.nextInt() % possibleLocations.size()
+        int index = Math.abs(random.nextInt()) % possibleLocations.size()
         this.enabledLocation = possibleLocations.get(index)
         this.enabled = possible.get(this.enabledLocation)
     }

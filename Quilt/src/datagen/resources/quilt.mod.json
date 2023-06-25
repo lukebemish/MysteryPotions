@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "dev.lukebemish.mysterypotions",
+    "id": "mysterypotions_datagen",
+    "version": "1.0.0",
+    "metadata": {
+      "name": "Mystery Potions Datagen",
+      "license": "LGPL-3.0-or-later"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "load_type": "always",
+    "entrypoints": {
+      "fabric-datagen": {
+        "value": "dev.lukebemish.mysterypotions.datagen.MysteryPotionsDatagen",
+        "adapter": "groovyduvet"
+      }
+    }
+  }
+}

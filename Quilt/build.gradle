@@ -10,6 +10,13 @@ base {
     archivesName = "${mod_id}-quilt-${libs.versions.minecraft.get()}"
 }
 
+sourceSets {
+    datagen {
+        compileClasspath += main.compileClasspath
+        runtimeClasspath += main.runtimeClasspath
+    }
+}
+
 loom {
     runs {
         client {
@@ -23,6 +30,18 @@ loom {
             setConfigName("Quilt Server")
             ideConfigGenerated(true)
             runDir("run-server")
+        }
+
+        datagen {
+            inherit client
+            name "Quilt Data Generation"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.output-dir=${project(':Common').file('src/main/generated')}"
+            vmArg "-Dfabric-api.datagen.modid=${mod_id}_datagen"
+
+            runDir "build/datagen"
+
+            source sourceSets.datagen
         }
     }
     runs.each {

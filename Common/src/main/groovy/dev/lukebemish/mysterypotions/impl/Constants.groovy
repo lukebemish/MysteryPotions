@@ -6,9 +6,6 @@
 package dev.lukebemish.mysterypotions.impl
 
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,7 +14,7 @@ import org.slf4j.LoggerFactory
 class Constants {
     private Constants() {}
 
-    public static final String MOD_ID = "mysterypotions"
-    public static final String MOD_NAME = "Mystery Potions"
+    public static final String MOD_ID = 'mysterypotions'
+    public static final String MOD_NAME = 'Mystery Potions'
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME)
 }

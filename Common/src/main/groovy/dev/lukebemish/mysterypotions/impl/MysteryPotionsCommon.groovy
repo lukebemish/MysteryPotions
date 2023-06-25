@@ -5,6 +5,8 @@
 
 package dev.lukebemish.mysterypotions.impl
 
+import dev.lukebemish.mysterypotions.impl.item.MysteryActionData
+import dev.lukebemish.mysterypotions.impl.item.MysteryActionItem
 import dev.lukebemish.mysterypotions.impl.item.MysteryPotionData
 import dev.lukebemish.mysterypotions.impl.item.MysteryPotionItem
 import dev.lukebemish.mysterypotions.impl.random.PiecewiseRandomizable
@@ -15,30 +17,61 @@ import groovy.transform.stc.SimpleType
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.effect.MobEffects
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
 import org.groovymc.cgl.reg.RegistrationProvider
+import org.groovymc.cgl.reg.RegistryObject
+
+import java.util.function.Consumer
 
 @CompileStatic
 final class MysteryPotionsCommon {
     static final RegistrationProvider<Item> ITEMS = RegistrationProvider.get(Registries.ITEM, Constants.MOD_ID)
     static final RegistryRandomizer ITEM_RANDOMIZER = new RegistryRandomizer(Registries.ITEM)
 
-    static void init() {
-        registerItem('potion_simple') {
-            MysteryPotionData data = new MysteryPotionData(
-                Set.of(
-                    new ResourceLocation("blindness"),
-                    new ResourceLocation("nausea"),
-                    new ResourceLocation("invisibility"),
-                    new ResourceLocation("luck")
-                ), [80,160,240], [1]
-            )
-            return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), data)
-        }
+    final RegistryObject<Item> potionSimple = registerItem('potion_simple') {
+        MysteryPotionData data = new MysteryPotionData(
+            Set.of(
+                new ResourceLocation("blindness"),
+                new ResourceLocation("nausea"),
+                new ResourceLocation("invisibility"),
+                new ResourceLocation("luck")
+            ), [80,160,240], [0]
+        )
+        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), data)
     }
 
-    static void registerItem(String location, @ClosureParams(value = SimpleType, options = 'net.minecraft.resources.ResourceLocation') Closure<Item> itemSupplier) {
-        ITEMS.register(location, {->
+    final RegistryObject<Item> potionFire = registerItem('potion_fire') {
+        MysteryActionData data = new MysteryActionData(
+            Map.of(
+                new ResourceLocation(Constants.MOD_ID, 'fire'),
+                { LivingEntity entity ->
+                    entity.setSecondsOnFire(15)
+                } as Consumer<LivingEntity>,
+                new ResourceLocation(Constants.MOD_ID, 'resistance'),
+                { LivingEntity entity ->
+                    MobEffectInstance instance = new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 300, 0)
+                    entity.addEffect(instance)
+                } as Consumer<LivingEntity>
+            )
+        )
+        return new MysteryActionItem(it, new Item.Properties().stacksTo(1), data)
+    }
+
+    private static MysteryPotionsCommon INSTANCE
+
+    static init() {
+        INSTANCE = new MysteryPotionsCommon()
+    }
+
+    static MysteryPotionsCommon getINSTANCE() {
+        return INSTANCE
+    }
+
+    static RegistryObject<Item> registerItem(String location, @ClosureParams(value = SimpleType, options = 'net.minecraft.resources.ResourceLocation') Closure<Item> itemSupplier) {
+        return ITEMS.register(location, {->
             ResourceLocation rl = new ResourceLocation(Constants.MOD_ID, location)
             Item item = itemSupplier.call(rl)
 

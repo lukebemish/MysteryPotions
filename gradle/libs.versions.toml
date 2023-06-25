@@ -5,8 +5,8 @@ parchment_mappings = "2023.03.12"
 quilt_loader = "0.19.1"
 
 qfapi = "7.0.3+0.83.1-1.20.1"
-groovyduvet_all = "3.0.3"
-groovyduvet_core = "3.0.1"
+groovyduvet_all = "3.0.4"
+groovyduvet_core = "3.0.2"
 cgl = "0.3.8"
 gml = "4.0.2"
 
