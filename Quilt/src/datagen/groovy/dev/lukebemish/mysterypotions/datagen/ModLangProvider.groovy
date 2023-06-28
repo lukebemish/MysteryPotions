@@ -11,7 +11,8 @@ class ModLangProvider extends FabricLanguageProvider {
 
     @Override
     void generateTranslations(TranslationBuilder translationBuilder) {
-        translationBuilder.add(MysteryPotionsCommon.INSTANCE.potionSimple.get(), "Swampy Brew")
-        translationBuilder.add(MysteryPotionsCommon.INSTANCE.potionFire.get(), "Flaming Concoction")
+        translationBuilder.add(MysteryPotionsCommon.INSTANCE.potionSimple.get(), 'Swampy Brew')
+        translationBuilder.add(MysteryPotionsCommon.INSTANCE.potionFire.get(), 'Flaming Concoction')
+        translationBuilder.add(MysteryPotionsCommon.INSTANCE.potionWater.get(), 'Mariner\'s Mixture')
     }
 }

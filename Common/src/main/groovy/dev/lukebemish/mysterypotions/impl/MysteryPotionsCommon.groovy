@@ -31,6 +31,8 @@ final class MysteryPotionsCommon {
     static final RegistrationProvider<Item> ITEMS = RegistrationProvider.get(Registries.ITEM, Constants.MOD_ID)
     static final RegistryRandomizer ITEM_RANDOMIZER = new RegistryRandomizer(Registries.ITEM)
 
+    final List<RegistryObject<Item>> brewingTabTargets = new ArrayList<>()
+
     final RegistryObject<Item> potionSimple = registerItem('potion_simple') {
         MysteryPotionData data = new MysteryPotionData(
             Set.of(
@@ -60,6 +62,22 @@ final class MysteryPotionsCommon {
         return new MysteryActionItem(it, new Item.Properties().stacksTo(1), data)
     }
 
+    final RegistryObject<Item> potionWater = registerItem('potion_water') {
+        MysteryActionData data = new MysteryActionData(
+            Map.of(
+                new ResourceLocation(Constants.MOD_ID, 'drown'),
+                { LivingEntity entity ->
+                    entity.airSupply = 0
+                } as Consumer<LivingEntity>,
+                new ResourceLocation(Constants.MOD_ID, 'air'),
+                { LivingEntity entity ->
+                    entity.airSupply = entity.maxAirSupply
+                } as Consumer<LivingEntity>
+            )
+        )
+        return new MysteryActionItem(it, new Item.Properties().stacksTo(1), data)
+    }
+
     private static MysteryPotionsCommon INSTANCE
 
     static init() {
@@ -70,8 +88,8 @@ final class MysteryPotionsCommon {
         return INSTANCE
     }
 
-    static RegistryObject<Item> registerItem(String location, @ClosureParams(value = SimpleType, options = 'net.minecraft.resources.ResourceLocation') Closure<Item> itemSupplier) {
-        return ITEMS.register(location, {->
+    RegistryObject<Item> registerItem(String location, @ClosureParams(value = SimpleType, options = 'net.minecraft.resources.ResourceLocation') Closure<Item> itemSupplier) {
+        var registered = ITEMS.register(location, {->
             ResourceLocation rl = new ResourceLocation(Constants.MOD_ID, location)
             Item item = itemSupplier.call(rl)
 
@@ -81,6 +99,8 @@ final class MysteryPotionsCommon {
 
             return item
         })
+        brewingTabTargets.add registered
+        return registered
     }
 
     static void setupRandomized(ServerLevel level) {
