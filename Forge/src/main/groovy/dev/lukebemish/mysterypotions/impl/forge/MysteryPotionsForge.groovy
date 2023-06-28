@@ -13,6 +13,8 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.item.CreativeModeTabs
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent
 import net.minecraftforge.event.server.ServerStartedEvent
 import org.groovymc.gml.GMod
 
@@ -25,6 +27,14 @@ class MysteryPotionsForge {
         forgeBus.addListener(ServerStartedEvent) {
             ServerLevel level = it.server.getLevel(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("overworld")))
             MysteryPotionsCommon.setupRandomized(level)
+        }
+
+        forgeBus.addListener(BuildCreativeModeTabContentsEvent) {
+            if (it.tabKey == CreativeModeTabs.FOOD_AND_DRINKS) {
+                MysteryPotionsCommon.INSTANCE.brewingTabTargets.each { registered ->
+                    it.accept(registered)
+                }
+            }
         }
     }
 }
