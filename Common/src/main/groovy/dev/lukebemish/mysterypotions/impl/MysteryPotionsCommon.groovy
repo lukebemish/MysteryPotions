@@ -21,6 +21,10 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.alchemy.PotionUtils
+import net.minecraft.world.item.alchemy.Potions
+import net.minecraft.world.item.crafting.Ingredient
 import org.groovymc.cgl.reg.RegistrationProvider
 import org.groovymc.cgl.reg.RegistryObject
 
@@ -32,6 +36,7 @@ final class MysteryPotionsCommon {
     static final RegistryRandomizer ITEM_RANDOMIZER = new RegistryRandomizer(Registries.ITEM)
 
     final List<RegistryObject<Item>> brewingTabTargets = new ArrayList<>()
+    final List<BrewingRecipe> brewingRecipes = new ArrayList<>()
 
     final RegistryObject<Item> potionSimple = registerItem('potion_simple') {
         MysteryPotionData data = new MysteryPotionData(
@@ -54,7 +59,7 @@ final class MysteryPotionsCommon {
                 } as Consumer<LivingEntity>,
                 new ResourceLocation(Constants.MOD_ID, 'resistance'),
                 { LivingEntity entity ->
-                    MobEffectInstance instance = new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 300, 0)
+                    MobEffectInstance instance = new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 7200, 0)
                     entity.addEffect(instance)
                 } as Consumer<LivingEntity>
             )
@@ -79,6 +84,24 @@ final class MysteryPotionsCommon {
     }
 
     private static MysteryPotionsCommon INSTANCE
+
+    private MysteryPotionsCommon() {
+        brewingRecipes << new BrewingRecipe(
+            { Ingredient.of(PotionUtils.setPotion(Items.POTION.defaultInstance, Potions.WATER)) },
+            { Ingredient.of(Items.LILY_PAD) },
+            { potionSimple.get().defaultInstance }
+        )
+        brewingRecipes << new BrewingRecipe(
+            { Ingredient.of(PotionUtils.setPotion(Items.POTION.defaultInstance, Potions.FIRE_RESISTANCE)) },
+            { Ingredient.of(Items.CHARCOAL) },
+            { potionFire.get().defaultInstance }
+        )
+        brewingRecipes << new BrewingRecipe(
+            { Ingredient.of(PotionUtils.setPotion(Items.POTION.defaultInstance, Potions.WATER)) },
+            { Ingredient.of(Items.PUFFERFISH) },
+            { potionWater.get().defaultInstance }
+        )
+    }
 
     static init() {
         INSTANCE = new MysteryPotionsCommon()

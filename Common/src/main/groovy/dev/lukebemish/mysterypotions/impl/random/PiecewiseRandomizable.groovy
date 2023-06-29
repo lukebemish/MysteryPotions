@@ -5,9 +5,11 @@
 
 package dev.lukebemish.mysterypotions.impl.random
 
+import groovy.transform.CompileStatic
 import net.minecraft.resources.ResourceLocation
 import org.jetbrains.annotations.NotNull
 
+@CompileStatic
 interface PiecewiseRandomizable {
     @NotNull ResourceLocation getSeedLocation()
 

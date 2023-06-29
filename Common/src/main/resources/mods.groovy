@@ -56,4 +56,9 @@ ModsDotGroovy.make {
             ]
         }
     }
+    onQuilt {
+        mixin = [
+            'mixin.mysterypotions.quilt.json'
+        ]
+    }
 }

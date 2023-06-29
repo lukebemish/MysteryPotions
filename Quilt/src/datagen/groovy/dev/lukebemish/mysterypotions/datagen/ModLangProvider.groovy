@@ -1,9 +1,11 @@
 package dev.lukebemish.mysterypotions.datagen
 
 import dev.lukebemish.mysterypotions.impl.MysteryPotionsCommon
+import groovy.transform.CompileStatic
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 
+@CompileStatic
 class ModLangProvider extends FabricLanguageProvider {
     protected ModLangProvider(FabricDataOutput dataOutput) {
         super(dataOutput)

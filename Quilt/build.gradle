@@ -47,6 +47,10 @@ loom {
     runs.each {
         it.vmArgs '-Dnet.fabricmc.tinyremapper.knownindybsm=org/codehaus/groovy/vmplugin/v8/IndyInterface'
     }
+
+    mixin {
+        defaultRefmapName = 'mysterypotions.refmap.json'
+    }
 }
 
 configurations {
