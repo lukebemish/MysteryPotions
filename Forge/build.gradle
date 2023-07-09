@@ -57,6 +57,9 @@ dependencies {
         exclude module: 'transform'
     }
 
+    runtimeOnly fg.deobf(libs.jsonwrangler.forge.get())
+    runtimeOnly libs.mixinextras.forge
+
     compileOnly fg.deobf(libs.cgl.forge.get())
 
     compileOnly project(path: ":Common", configuration: "namedElements")

@@ -62,6 +62,20 @@ subprojects {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org'
         }
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup 'maven.modrinth'
+            }
+
+        }
+        maven {
+            url = "https://jitpack.io"
+            content {
+                includeGroup 'com.github.llamalad7.mixinextras'
+            }
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {

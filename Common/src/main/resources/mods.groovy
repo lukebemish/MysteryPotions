@@ -45,6 +45,10 @@ ModsDotGroovy.make {
             quiltLoader {
                 versionRange = ">=${this.quiltLoaderVersion}"
             }
+
+            mod('jsonwrangler') {
+                versionRange = ">=${this.libs.versions.jsonwrangler.human}"
+            }
         }
 
         entrypoints {

@@ -68,6 +68,9 @@ dependencies {
 
     modImplementation libs.quilt.loader
 
+    modLocalRuntime libs.jsonwrangler.quilt
+    modLocalRuntime libs.mixinextras.quilt
+
     modImplementation libs.qfapi
 
     modImplementation libs.groovyduvet.all

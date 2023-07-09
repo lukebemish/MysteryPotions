@@ -22,9 +22,9 @@ import net.minecraft.world.level.gameevent.GameEvent
 @CompileStatic
 class MysteryPotionItem extends Item implements PiecewiseRandomizable {
     private final ResourceLocation location
-    private final MysteryPotionData data
+    private final List<MysteryPotionData> data
 
-    MysteryPotionItem(ResourceLocation location, Properties properties, MysteryPotionData data) {
+    MysteryPotionItem(ResourceLocation location, Properties properties, List<MysteryPotionData> data) {
         super(properties)
         this.location = location
         this.data = data
@@ -34,15 +34,17 @@ class MysteryPotionItem extends Item implements PiecewiseRandomizable {
     ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
         if (livingEntity instanceof Player) {
             if (!level.isClientSide) {
-                MobEffectInstance instance = new MobEffectInstance(
-                    data.effects.enabled.get(),
-                    data.durations.enabled,
-                    data.amplifiers.enabled
-                )
-                if (instance.effect.instantenous)
-                    instance.effect.applyInstantenousEffect(livingEntity, livingEntity, livingEntity, instance.amplifier, 1.0d)
-                else
-                    livingEntity.addEffect(instance)
+                for (MysteryPotionData d : data) {
+                    MobEffectInstance instance = new MobEffectInstance(
+                        d.effects.enabled.get(),
+                        d.durations.enabled,
+                        d.amplifiers.enabled
+                    )
+                    if (instance.effect.instantenous)
+                        instance.effect.applyInstantenousEffect(livingEntity, livingEntity, livingEntity, instance.amplifier, 1.0d)
+                    else
+                        livingEntity.addEffect(instance)
+                }
             }
             livingEntity.awardStat(Stats.ITEM_USED.get(this))
             if (!livingEntity.abilities.instabuild) {
@@ -86,9 +88,11 @@ class MysteryPotionItem extends Item implements PiecewiseRandomizable {
     @Override
     Map<String, RandomizerHolder<?>> getRandomizers() {
         Map<String, RandomizerHolder<?>> map = new HashMap<>()
-        map['effect'] = data.effects
-        map['duration'] = data.durations
-        map['amplifier'] = data.amplifiers
+        for (int i = 0; i < data.size(); i ++) {
+            map["effect$i" as String] = data[i].effects
+            map["duration$i" as String] = data[i].durations
+            map["amplifier$i" as String] = data[i].amplifiers
+        }
         return map
     }
 }

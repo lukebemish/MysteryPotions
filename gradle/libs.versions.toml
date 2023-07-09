@@ -5,13 +5,18 @@ parchment_mappings = "2023.03.12"
 quilt_loader = "0.19.1"
 
 qfapi = "7.0.3+0.83.1-1.20.1"
-groovyduvet_all = "3.0.4"
-groovyduvet_core = "3.0.2"
+groovyduvet_all = "3.0.5"
+groovyduvet_core = "3.0.3"
 cgl = "0.3.8"
-gml = "4.0.2"
+gml = "4.0.3"
 
 forge = "1.20.1-47.0.3"
 mixin = "0.8.5"
+
+jsonwrangler_forge = "kuCFjgUQ"
+jsonwrangler_quilt = "sCzGPtXK"
+jsonwrangler_human = "1.0.1"
+mixinextras = '0.2.0-beta.8'
 
 autoservice = "1.1.1"
 autoextension = "0.1.1"
@@ -35,6 +40,11 @@ gml = { module = "org.groovymc.gml:gml", version.ref = "gml" }
 
 forge = { module = "net.minecraftforge:forge", version.ref = "forge" }
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
+
+jsonwrangler_forge = { module = "maven.modrinth:jsonwrangler", version.ref = "jsonwrangler_forge" }
+jsonwrangler_quilt = { module = "maven.modrinth:jsonwrangler", version.ref = "jsonwrangler_quilt" }
+mixinextras_quilt = { module = "com.github.llamalad7.mixinextras:mixinextras-fabric", version.ref = "mixinextras" }
+mixinextras_forge = { module = "com.github.llamalad7.mixinextras:mixinextras-forge", version.ref = "mixinextras" }
 
 autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
 autoextension = { module = "dev.lukebemish.autoextension:autoextension", version.ref = "autoextension" }

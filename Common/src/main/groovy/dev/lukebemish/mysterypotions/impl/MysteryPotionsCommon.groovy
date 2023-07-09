@@ -39,15 +39,61 @@ final class MysteryPotionsCommon {
     final List<BrewingRecipe> brewingRecipes = new ArrayList<>()
 
     final RegistryObject<Item> potionSimple = registerItem('potion_simple') {
-        MysteryPotionData data = new MysteryPotionData(
+        MysteryPotionData data = MysteryPotionData.of(
             Set.of(
-                new ResourceLocation("blindness"),
-                new ResourceLocation("nausea"),
-                new ResourceLocation("invisibility"),
-                new ResourceLocation("luck")
+                new ResourceLocation('blindness'),
+                new ResourceLocation('nausea'),
+                new ResourceLocation('invisibility'),
+                new ResourceLocation('luck')
             ), [80,160,240], [0]
         )
-        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), data)
+        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data))
+    }
+
+    final RegistryObject<Item> potionIntermediate = registerItem('potion_intermediate') {
+        MysteryPotionData data1 = MysteryPotionData.of(
+            Set.of(
+                new ResourceLocation('speed'),
+                new ResourceLocation('slowness'),
+                new ResourceLocation('strength'),
+                new ResourceLocation('weakness'),
+                new ResourceLocation('haste'),
+                new ResourceLocation('mining_fatigue'),
+            ), [2400,3600,4800], [0]
+        )
+        MysteryPotionData data2 = MysteryPotionData.of(
+            Set.of(
+                new ResourceLocation('instant_health'),
+                new ResourceLocation('instant_damage')
+            ), [80], [0]
+        )
+        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data1, data2))
+    }
+
+    final RegistryObject<Item> potionAdvanced = registerItem('potion_advanced') {
+        MysteryPotionData data1 = MysteryPotionData.of(
+            Set.of(
+                new ResourceLocation('regeneration'),
+                new ResourceLocation('wither')
+            ), [3600,7200,9600], [1,2]
+        )
+        MysteryPotionData data2 = MysteryPotionData.of(
+            Set.of(
+                new ResourceLocation('slow_falling'),
+                new ResourceLocation('levitation')
+            ), [240,360,480], [1,2,3]
+        )
+        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data1, data2))
+    }
+
+    final RegistryObject<Item> potionVillager = registerItem('potion_villager') {
+        MysteryPotionData data = MysteryPotionData.of(
+            Set.of(
+                new ResourceLocation('hero_of_the_village'),
+                new ResourceLocation('bad_omen'),
+            ), [3600,9600], [0]
+        )
+        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data))
     }
 
     final RegistryObject<Item> potionFire = registerItem('potion_fire') {
