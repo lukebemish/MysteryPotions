@@ -19,5 +19,8 @@ class ModLangProvider extends FabricLanguageProvider {
         translationBuilder.add(MysteryPotionsCommon.INSTANCE.potionAdvanced.get(), 'Floating Blood')
         translationBuilder.add(MysteryPotionsCommon.INSTANCE.potionIntermediate.get(), 'Bottled Time')
         translationBuilder.add(MysteryPotionsCommon.INSTANCE.potionVillager.get(), 'Distilled Emeralds')
+
+        translationBuilder.add('item.mysterypotions.potion_villager.desc', 'Probably won\'t do much outside of a village')
+        translationBuilder.add('item.mysterypotions.potion_water.desc', 'Probably won\'t do much outside of water')
     }
 }

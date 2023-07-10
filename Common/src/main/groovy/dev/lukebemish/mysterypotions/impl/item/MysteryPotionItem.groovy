@@ -8,7 +8,14 @@ package dev.lukebemish.mysterypotions.impl.item
 import dev.lukebemish.mysterypotions.impl.random.PiecewiseRandomizable
 import dev.lukebemish.mysterypotions.impl.random.RandomizerHolder
 import groovy.transform.CompileStatic
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.SimpleType
+import net.minecraft.ChatFormatting
+import net.minecraft.advancements.CriteriaTriggers
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.stats.Stats
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -18,21 +25,37 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.*
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.gameevent.GameEvent
+import org.jetbrains.annotations.Nullable
 
 @CompileStatic
 class MysteryPotionItem extends Item implements PiecewiseRandomizable {
     private final ResourceLocation location
     private final List<MysteryPotionData> data
+    private final Closure<Boolean> allowUse
+    private final boolean tooltip
 
     MysteryPotionItem(ResourceLocation location, Properties properties, List<MysteryPotionData> data) {
+        this(location, properties, data, { level, entity -> true }, false)
+    }
+
+    MysteryPotionItem(ResourceLocation location, Properties properties, List<MysteryPotionData> data,
+                      @ClosureParams(value = SimpleType.class, options = [
+                          'net.minecraft.server.level.ServerLevel',
+                          'net.minecraft.world.entity.LivingEntity'
+                      ]) Closure<Boolean> allowUse, boolean tooltip) {
         super(properties)
         this.location = location
         this.data = data
+        this.allowUse = allowUse
+        this.tooltip = tooltip
     }
 
     @Override
     ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
         if (livingEntity instanceof Player) {
+            if (livingEntity instanceof ServerPlayer) {
+                CriteriaTriggers.CONSUME_ITEM.trigger(livingEntity, stack)
+            }
             if (!level.isClientSide) {
                 for (MysteryPotionData d : data) {
                     MobEffectInstance instance = new MobEffectInstance(
@@ -83,6 +106,20 @@ class MysteryPotionItem extends Item implements PiecewiseRandomizable {
     @Override
     ResourceLocation getSeedLocation() {
         return location
+    }
+
+    @Override
+    void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        if (level instanceof ServerLevel) {
+            if (!allowUse.call(level, livingEntity)) {
+                livingEntity.stopUsingItem()
+            }
+        }
+    }
+
+    @Override
+    void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+        tooltipComponents.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY))
     }
 
     @Override

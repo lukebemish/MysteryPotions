@@ -93,7 +93,10 @@ final class MysteryPotionsCommon {
                 new ResourceLocation('bad_omen'),
             ), [3600,9600], [0]
         )
-        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data))
+        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data),
+            { ServerLevel serverLevel, LivingEntity livingEntity ->
+                serverLevel.isVillage(livingEntity.blockPosition())
+        }, true)
     }
 
     final RegistryObject<Item> potionFire = registerItem('potion_fire') {
@@ -126,7 +129,10 @@ final class MysteryPotionsCommon {
                 } as Consumer<LivingEntity>
             )
         )
-        return new MysteryActionItem(it, new Item.Properties().stacksTo(1), data)
+        return new MysteryActionItem(it, new Item.Properties().stacksTo(1), data,
+            { ServerLevel serverLevel, LivingEntity livingEntity ->
+                livingEntity.underWater || livingEntity.airSupply != livingEntity.maxAirSupply
+            }, true)
     }
 
     private static MysteryPotionsCommon INSTANCE
