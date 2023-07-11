@@ -101,7 +101,7 @@ if (System.getenv('CURSEFORGE_KEY')) {
             releaseType = "${project.release_type}"
             addGameVersion libs.versions.minecraft.get()
             addGameVersion 'Forge'
-            mainArtifact(tasks.reobfJar) {
+            mainArtifact(jar) {
                 displayName = "Mystery Potions [Forge] v$project.version"
             }
             relations {
@@ -113,10 +113,6 @@ if (System.getenv('CURSEFORGE_KEY')) {
             forgeGradleIntegration = true
         }
     }
-
-    tasks.curseforge {
-        dependsOn tasks.reobfJar
-    }
 }
 
 if (System.getenv('MODRINTH_KEY')) {
@@ -126,7 +122,7 @@ if (System.getenv('MODRINTH_KEY')) {
         versionNumber = "$project.version"
         versionType = "${project.release_type}"
         detectLoaders = false
-        uploadFile = tasks.reobfJar
+        uploadFile = jar
 
         gameVersions = [libs.versions.minecraft.get()]
         loaders = ['forge']
@@ -134,9 +130,5 @@ if (System.getenv('MODRINTH_KEY')) {
             required.project 'gml'
             required.project 'jsonwrangler'
         }
-    }
-
-    tasks.modrinth {
-        dependsOn tasks.reobfJar
     }
 }
