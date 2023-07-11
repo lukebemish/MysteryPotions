@@ -19,13 +19,13 @@ class RandomizerHolder<T> {
         possible = Map.copyOf(data)
     }
 
-    synchronized void setup(ResourceLocation existing, ResourceLocation seedLocation, long seed) {
+    synchronized void setup(ResourceLocation existing, ResourceLocation seedLocation, String seedKey, long seed) {
         if (existing !== null && possible.containsKey(existing)) {
             enabled = possible.get(existing)
             return
         }
 
-        Random random = new Random(seed + seedLocation.hashCode())
+        Random random = new Random(seed + seedLocation.hashCode() + seedKey.hashCode())
         List<ResourceLocation> possibleLocations = possible.keySet().sort(false) { it.toString() }
         int index = Math.abs(random.nextInt()) % possibleLocations.size()
         this.enabledLocation = possibleLocations.get(index)

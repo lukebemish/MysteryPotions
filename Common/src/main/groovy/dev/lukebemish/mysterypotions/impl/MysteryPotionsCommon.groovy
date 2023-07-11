@@ -14,21 +14,30 @@ import dev.lukebemish.mysterypotions.impl.random.RegistryRandomizer
 import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.SimpleType
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.util.RandomSource
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.npc.VillagerProfession
+import net.minecraft.world.entity.npc.VillagerTrades
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.PotionUtils
 import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.trading.MerchantOffer
 import org.groovymc.cgl.reg.RegistrationProvider
 import org.groovymc.cgl.reg.RegistryObject
 
 import java.util.function.Consumer
+import java.util.function.IntFunction
 
 @CompileStatic
 final class MysteryPotionsCommon {
@@ -37,20 +46,26 @@ final class MysteryPotionsCommon {
 
     final List<RegistryObject<Item>> brewingTabTargets = new ArrayList<>()
     final List<BrewingRecipe> brewingRecipes = new ArrayList<>()
+    final Map<VillagerProfession, Int2ObjectMap<List<VillagerTrades.ItemListing>>> trades = new HashMap<>()
 
-    final RegistryObject<Item> potionSimple = registerItem('potion_simple') {
-        MysteryPotionData data = MysteryPotionData.of(
-            Set.of(
-                new ResourceLocation('blindness'),
-                new ResourceLocation('nausea'),
-                new ResourceLocation('invisibility'),
-                new ResourceLocation('luck')
-            ), [80,160,240], [0]
-        )
-        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data))
+    final RegistryObject<Item> potionSwamp = registerItem('potion_swamp') {
+        Closure<MysteryPotionData> dataProvider = { ->
+            return MysteryPotionData.of(
+                Set.of(
+                    new ResourceLocation('blindness'),
+                    new ResourceLocation('nausea'),
+                    new ResourceLocation('invisibility'),
+                    new ResourceLocation('night_vision')
+                ), [80, 160, 240], [0]
+            )
+        }
+        return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(
+            dataProvider.call(),
+            dataProvider.call()
+        ))
     }
 
-    final RegistryObject<Item> potionIntermediate = registerItem('potion_intermediate') {
+    final RegistryObject<Item> potionTime = registerItem('potion_time') {
         MysteryPotionData data1 = MysteryPotionData.of(
             Set.of(
                 new ResourceLocation('speed'),
@@ -70,7 +85,7 @@ final class MysteryPotionsCommon {
         return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data1, data2))
     }
 
-    final RegistryObject<Item> potionAdvanced = registerItem('potion_advanced') {
+    final RegistryObject<Item> potionFloatingBlood = registerItem('potion_floating_blood') {
         MysteryPotionData data1 = MysteryPotionData.of(
             Set.of(
                 new ResourceLocation('regeneration'),
@@ -81,7 +96,7 @@ final class MysteryPotionsCommon {
             Set.of(
                 new ResourceLocation('slow_falling'),
                 new ResourceLocation('levitation')
-            ), [240,360,480], [1,2,3]
+            ), [60,120,180], [0,1,2]
         )
         return new MysteryPotionItem(it, new Item.Properties().stacksTo(1), List.of(data1, data2))
     }
@@ -141,7 +156,7 @@ final class MysteryPotionsCommon {
         brewingRecipes << new BrewingRecipe(
             { Ingredient.of(PotionUtils.setPotion(Items.POTION.defaultInstance, Potions.WATER)) },
             { Ingredient.of(Items.LILY_PAD) },
-            { potionSimple.get().defaultInstance }
+            { potionSwamp.get().defaultInstance }
         )
         brewingRecipes << new BrewingRecipe(
             { Ingredient.of(PotionUtils.setPotion(Items.POTION.defaultInstance, Potions.FIRE_RESISTANCE)) },
@@ -153,6 +168,21 @@ final class MysteryPotionsCommon {
             { Ingredient.of(Items.PUFFERFISH) },
             { potionWater.get().defaultInstance }
         )
+        brewingRecipes << new BrewingRecipe(
+            { Ingredient.of(PotionUtils.setPotion(Items.POTION.defaultInstance, Potions.WATER)) },
+            { Ingredient.of(Items.CLOCK) },
+            { potionTime.get().defaultInstance }
+        )
+
+        trades.computeIfAbsent(VillagerProfession.CLERIC, {new Int2ObjectArrayMap<>()}).computeIfAbsent(5, {[]} as IntFunction<List<VillagerTrades.ItemListing>>) << new VillagerTrades.ItemListing() {
+            @Override
+            MerchantOffer getOffer(Entity trader, RandomSource random) {
+                return new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 32),
+                    potionVillager.get().defaultInstance,
+                    5, 30, 0.05F);
+            }
+        }
     }
 
     static init() {

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "mysterypotions:item/potion_simple"
+    "layer0": "mysterypotions:item/potion_swamp"
   }
 }

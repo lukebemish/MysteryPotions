@@ -55,7 +55,7 @@ class RandomizerSavedData extends SavedData {
     void setup(PiecewiseRandomizable target, long seed) {
         Map<String, ResourceLocation> map = itemKnownKeys.computeIfAbsent(target.seedLocation) { new HashMap<>() }
         target.randomizers.each { key, holder ->
-            holder.setup(map.get(key), target.seedLocation, seed)
+            holder.setup(map.get(key), target.seedLocation, key, seed)
         }
 
         target.randomizers.each { key, holder ->

@@ -16,6 +16,7 @@ import net.minecraft.world.item.CreativeModeTabs
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent
 import net.minecraftforge.event.server.ServerStartedEvent
+import net.minecraftforge.event.village.VillagerTradesEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import org.groovymc.gml.GMod
 
@@ -32,7 +33,6 @@ class MysteryPotionsForge {
 
         modBus.addListener(BuildCreativeModeTabContentsEvent) {
             if (it.tabKey == CreativeModeTabs.FOOD_AND_DRINKS) {
-                println 'Added items to tab...'
                 MysteryPotionsCommon.INSTANCE.brewingTabTargets.each { registered ->
                     it.accept(registered)
                 }
@@ -44,6 +44,16 @@ class MysteryPotionsForge {
                 MysteryPotionsCommon.INSTANCE.brewingRecipes.each { recipe ->
                     BrewingRecipeRegistry.addRecipe(recipe.input.call(), recipe.ingredient.call(), recipe.result.call())
                 }
+            }
+        }
+
+        forgeBus.addListener(VillagerTradesEvent) {
+            var maps = MysteryPotionsCommon.INSTANCE.trades.get(it.type)
+            if (maps === null) return
+            for (int i = 1; i <= 5; i++) {
+                var trades = maps.get(i)
+                if (trades === null) continue
+                it.trades.get(i).addAll(trades)
             }
         }
     }

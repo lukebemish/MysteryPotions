@@ -26,11 +26,11 @@ class ModModelProvider extends FabricModelProvider {
 
     @Override
     void generateItemModels(ItemModelGenerators itemModelGenerator) {
-        itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionSimple.get(), ModelTemplates.FLAT_ITEM)
+        itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionSwamp.get(), ModelTemplates.FLAT_ITEM)
         itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionFire.get(), ModelTemplates.FLAT_ITEM)
         itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionWater.get(), ModelTemplates.FLAT_ITEM)
-        itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionIntermediate.get(), ModelTemplates.FLAT_ITEM)
-        itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionAdvanced.get(), ModelTemplates.FLAT_ITEM)
+        itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionTime.get(), ModelTemplates.FLAT_ITEM)
+        itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionFloatingBlood.get(), ModelTemplates.FLAT_ITEM)
         itemModelGenerator.generateFlatItem(MysteryPotionsCommon.INSTANCE.potionVillager.get(), ModelTemplates.FLAT_ITEM)
     }
 }

@@ -1,8 +1,8 @@
 {
-  "item.mysterypotions.potion_advanced": "Floating Blood",
   "item.mysterypotions.potion_fire": "Flaming Concoction",
-  "item.mysterypotions.potion_intermediate": "Bottled Time",
-  "item.mysterypotions.potion_simple": "Swampy Brew",
+  "item.mysterypotions.potion_floating_blood": "Floating Blood",
+  "item.mysterypotions.potion_swamp": "Swampy Brew",
+  "item.mysterypotions.potion_time": "Bottled Time",
   "item.mysterypotions.potion_villager": "Distilled Emeralds",
   "item.mysterypotions.potion_villager.desc": "Probably won't do much outside of a village",
   "item.mysterypotions.potion_water": "Mariner's Mixture",

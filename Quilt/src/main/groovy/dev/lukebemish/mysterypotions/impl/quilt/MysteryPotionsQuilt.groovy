@@ -13,8 +13,11 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.npc.VillagerProfession
+import net.minecraft.world.entity.npc.VillagerTrades
 import net.minecraft.world.item.CreativeModeTabs
 import org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents
+import org.quiltmc.qsl.villager.api.TradeOfferHelper
 
 MysteryPotionsCommon.init()
 
@@ -28,3 +31,15 @@ ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register({ 
         it.accept registered.get()
     }
 } as ItemGroupEvents.ModifyEntries)
+
+for (final entry : MysteryPotionsCommon.INSTANCE.trades.entrySet()) {
+    VillagerProfession profession = entry.key
+    Map<Integer, List<VillagerTrades.ItemListing>> tradesMap = entry.value
+    for (final entry2 : tradesMap.int2ObjectEntrySet()) {
+        int level = entry2.intKey
+        List<VillagerTrades.ItemListing> trades = entry2.value
+        TradeOfferHelper.registerVillagerOffers(profession, level, {
+            it.addAll trades
+        })
+    }
+}

@@ -1,7 +1,7 @@
-// 1.20.1	2023-07-10T00:06:21.66554907	Mystery Potions/Model Definitions
+// 1.20.1	2023-07-10T20:50:33.686467865	Mystery Potions/Model Definitions
 941a24607568286228ea654dfb35efa1c4eecb00 assets/mysterypotions/models/item/potion_fire.json
-8f94a134220a3001b36270868c326e6b3906aab6 assets/mysterypotions/models/item/potion_intermediate.json
-aa87a38bd0b0dee765e7d82d78e5587831eaec74 assets/mysterypotions/models/item/potion_advanced.json
-ab279e922303c93e1dab3679d7a7d86f3cc384b2 assets/mysterypotions/models/item/potion_simple.json
+768c60ddf563186faf481e29ecc5c5ea97fd4e34 assets/mysterypotions/models/item/potion_floating_blood.json
+736e710c1fa5cb88a15e0a55b3fd2ae13c0070ca assets/mysterypotions/models/item/potion_time.json
 b3500fb2eb7219fa39bf6f4e4bbfd86bd1ae4c59 assets/mysterypotions/models/item/potion_water.json
 53276de513eab9a75166fd309106dc57001b4fa0 assets/mysterypotions/models/item/potion_villager.json
+1bea0347c25a9203af8a763bfce881303503c7e9 assets/mysterypotions/models/item/potion_swamp.json

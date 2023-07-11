@@ -119,7 +119,8 @@ class MysteryPotionItem extends Item implements PiecewiseRandomizable {
 
     @Override
     void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY))
+        if (tooltip)
+            tooltipComponents.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY))
     }
 
     @Override
