@@ -169,7 +169,7 @@ final class MysteryPotionsCommon {
             { potionWater.get().defaultInstance }
         )
         brewingRecipes << new BrewingRecipe(
-            { Ingredient.of(PotionUtils.setPotion(Items.POTION.defaultInstance, Potions.WATER)) },
+            { Ingredient.of(PotionUtils.setPotion(Items.POTION.defaultInstance, Potions.AWKWARD)) },
             { Ingredient.of(Items.CLOCK) },
             { potionTime.get().defaultInstance }
         )
